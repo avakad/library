@@ -19,43 +19,6 @@ public class BookController {
     private BookRepos bookRepos;
 
 
-    //private int counter = 0;
-
-
-    @GetMapping("/book")
-    public String greeting(
-            @RequestParam(name="name", required=false, defaultValue="World") String name,
-            Map<String, Object> model
-    ) {
-        model.put("name", name);
-        return "greeting";
-    }
-/*
-    @GetMapping
-    public String main(Map<String, Object> model) {
-
-        Iterable<Book> books = bookRepos.findAll();
-
-        model.put("books", books);
-
-        return "main";
-    }
-
-    @PostMapping
-    public String add(@RequestParam String bookName, @RequestParam String tag, Map<String, Object> model) {
-        Book book = new Book(bookName, tag);
-
-        bookRepos.save(book);
-
-        Iterable<Book> books = bookRepos.findAll();
-
-        model.put("books", books);
-
-        return "main";
-    }
-
- */
-
     //__________________________________________________________________________
 
     /*
