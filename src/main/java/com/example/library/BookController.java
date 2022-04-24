@@ -17,6 +17,13 @@ public class BookController {
 
     @Autowired
     private BookRepos bookRepos;
+    
+    @GetMapping
+    public Iterable<Book> main(Map<String, Object> model) {
+        Iterable<Book> books = bookRepos.findAll();
+        model.put("books", books);
+        return books;
+    }
 
 
     //__________________________________________________________________________
