@@ -1,30 +1,39 @@
 package com.example.library;
 import com.example.library.domain.Book;
-import com.example.library.repos.BookRepos;
+import com.example.library.repos.BookObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
 @RestController
-@RequestMapping("/book")
+@RequestMapping("/library")
 public class BookController {
 
     @Autowired
-    private BookRepos bookRepos;
-    
-    @GetMapping
-    public Iterable<Book> main(Map<String, Object> model) {
-        Iterable<Book> books = bookRepos.findAll();
+    private BookObject bookObject;
+
+    @GetMapping("/books")
+    public Iterable<Book> get(Map<String, Object> model) {
+        Iterable<Book> books = bookObject.findAll();
         model.put("books", books);
         return books;
     }
 
+    @GetMapping("/books/{id}")
+    public Book getOne(@PathVariable("id") Book book) {
+        return book;
+    }
+
+    @PostMapping
+    public void add(@RequestParam String bookName, @RequestParam String author, Map<String, Object> model) {
+        Book book = new Book(bookName, author);
+        bookObject.save(book);
+        Iterable<Book> books = bookObject.findAll();
+        model.put("books", books);
+    }
 
     //__________________________________________________________________________
 
