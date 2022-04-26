@@ -16,13 +16,27 @@ import java.util.Map;
 public class BookController {
 
     @Autowired
-    private BookRepos bookRepos;
+    private BookObject bookObject;
     
     @GetMapping
     public Iterable<Book> main(Map<String, Object> model) {
-        Iterable<Book> books = bookRepos.findAll();
+        Iterable<Book> books = bookObject.findAll();
         model.put("books", books);
         return books;
+    }
+    
+    
+    @GetMapping("/books/{id}")
+    public Book getOne(@PathVariable("id") Book book) {
+        return book;
+    }
+
+    @PostMapping
+    public void add(@RequestParam String bookName, @RequestParam String author, Map<String, Object> model) {
+        Book book = new Book(bookName, author);
+        bookObject.save(book);
+        Iterable<Book> books = bookObject.findAll();
+        model.put("books", books);
     }
 
 
