@@ -1,27 +1,31 @@
 package com.example.library;
 import com.example.library.domain.Book;
-import com.example.library.repos.BookObject;
+import com.example.library.repos.BookRepos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
 @RestController
-@RequestMapping("/library")
+@RequestMapping("/book")
 public class BookController {
 
     @Autowired
     private BookObject bookObject;
-
-    @GetMapping("/books")
-    public Iterable<Book> get(Map<String, Object> model) {
+    
+    @GetMapping
+    public Iterable<Book> main(Map<String, Object> model) {
         Iterable<Book> books = bookObject.findAll();
         model.put("books", books);
         return books;
     }
-
+    
+    
     @GetMapping("/books/{id}")
     public Book getOne(@PathVariable("id") Book book) {
         return book;
@@ -34,6 +38,7 @@ public class BookController {
         Iterable<Book> books = bookObject.findAll();
         model.put("books", books);
     }
+
 
     //__________________________________________________________________________
 
