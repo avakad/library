@@ -1,43 +1,54 @@
 package com.example.library;
+import com.example.library.config.MapperUtil;
 import com.example.library.domain.Book;
-import com.example.library.repos.BookRepos;
+import com.example.library.dto.BookDTO;
+import com.example.library.dto.BooksDTO;
+import com.example.library.repos.BookRepo;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-@Controller
 @RestController
 @RequestMapping("/book")
 public class BookController {
 
     @Autowired
-    private BookObject bookObject;
+    private BookRepo bookRepo;
+
+    @Autowired
+    private ModelMapper modelMapper;
     
     @GetMapping
-    public Iterable<Book> main(Map<String, Object> model) {
-        Iterable<Book> books = bookObject.findAll();
-        model.put("books", books);
-        return books;
-    }
-    
-    
-    @GetMapping("/books/{id}")
-    public Book getOne(@PathVariable("id") Book book) {
-        return book;
+    public ResponseEntity<BooksDTO> getBooks() {
+        Iterable<Book> booksIter = bookRepo.findAll();
+        List<Book> booksList = new ArrayList<>();
+        booksIter.forEach(booksList::add);
+        List<BookDTO> books = MapperUtil.convertList(booksList, this::convertToBookDTO);
+        return ResponseEntity.ok(new BooksDTO(books));
     }
 
-    @PostMapping
-    public void add(@RequestParam String bookName, @RequestParam String author, Map<String, Object> model) {
-        Book book = new Book(bookName, author);
-        bookObject.save(book);
-        Iterable<Book> books = bookObject.findAll();
-        model.put("books", books);
+    private BookDTO convertToBookDTO(Book book) {
+        return modelMapper.map(book, BookDTO.class);
     }
+    
+    
+//    @GetMapping("/books/{id}")
+//    public Book getOne(@PathVariable("id") Book book) {
+//        return book;
+//    }
+//
+//    @PostMapping
+//    public void add(@RequestParam String bookName, @RequestParam String author, Map<String, Object> model) {
+//        Book book = new Book(bookName, author);
+//        bookObject.save(book);
+//        Iterable<Book> books = bookObject.findAll();
+//        model.put("books", books);
+//    }
 
 
     //__________________________________________________________________________
